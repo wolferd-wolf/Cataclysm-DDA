@@ -736,6 +736,11 @@ ifeq ($(NATIVE), emscripten)
   CXXFLAGS += $(EMSCRIPTEN_SDL_CFLAGS)
   LDFLAGS += $(EMSCRIPTEN_SDL_LIBS)
 
+  # Remove GCC-only warning flags that are appended before this Emscripten block.
+  # These are incompatible with Emscripten's Clang when -Werror is enabled.
+  WARNINGS := $(filter-out -Wlogical-op -Wno-unknown-warning -Wno-unknown-warning-option,$(WARNINGS))
+  CXX_WARNINGS := $(filter-out -Wno-unknown-warning -Wno-unknown-warning-option,$(CXX_WARNINGS))
+
   ifeq ($(RELEASE), 1)
     # Release-mode Linker flags.
     LDFLAGS += -Os
