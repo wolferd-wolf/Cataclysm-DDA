@@ -1,28 +1,27 @@
 #!/bin/bash
 #
-# UNSUPPORTED: this build cannot currently succeed.
+# Build Cataclysm-DDA's SDL3 tiles client for WebAssembly.
 #
-# The target was abandoned in 2025. The PR CI leg was commented out on
-# 2025-07-14 in commit f530407bda (PR #81827), and the release "WebAssembly
-# Bundle" matrix entry is commented out as well.
-#
-# SDL2 support has since been removed, so the SDL flags this script relied on
-# are gone from the Makefile. Emscripten does ship an SDL3 port (3.4.2) and an
-# SDL3_ttf port, but no SDL3_image or SDL3_mixer port, so how to build tiles
-# here is an open question.
-#
-# The script is kept deliberately, in the state it bit-rotted into, for anyone
-# who wants to revive the path.
+# The browser workflow installs a current Emscripten SDK and builds the
+# SDL3/SDL3_image/SDL3_ttf stack from source.  This script intentionally does
+# not build translations, sound, or any native desktop targets.
 #
 set -exo pipefail
 
 CCACHE=${CCACHE:-0}
 
-emsdk install 3.1.51
-emsdk activate 3.1.51
-if [ "$CCACHE" == "1" ]
-then
-    emsdk activate ccache-git-emscripten-64bit
-fi
+command -v emcc >/dev/null
+command -v em++ >/dev/null
+command -v emcmake >/dev/null
+command -v pkg-config >/dev/null
 
-make -j`nproc` NATIVE=emscripten BACKTRACE=0 TILES=1 TESTS=0 RUNTESTS=0 RELEASE=1 CCACHE="$CCACHE" LINTJSON=0 cataclysm-tiles.js
+: "${EMSCRIPTEN_SDL_PREFIX:?EMSCRIPTEN_SDL_PREFIX must point at the Emscripten SDL3 install}"
+
+export PKG_CONFIG_PATH="${EMSCRIPTEN_SDL_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+export CMAKE_PREFIX_PATH="${EMSCRIPTEN_SDL_PREFIX}:${CMAKE_PREFIX_PATH:-}"
+
+pkg-config --atleast-version=3.4.0 sdl3
+pkg-config --exists sdl3-image
+pkg-config --exists sdl3-ttf
+
+make -j$(nproc)   NATIVE=emscripten   BACKTRACE=0   TILES=1   SOUND=0   TESTS=0   RUNTESTS=0   RELEASE=1   CCACHE="$CCACHE"   LINTJSON=0   cataclysm-tiles.js
