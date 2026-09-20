@@ -4,8 +4,8 @@
 #define __has_feature(x) 0
 #endif
 
-// snmalloc isn't compatible with any sanitizers.
-#if !defined(__SANITIZE_ADDRESS__) && !__has_feature(address_sanitizer)
+// snmalloc isn't compatible with any sanitizers or the WebAssembly target.
+#if !defined(__SANITIZE_ADDRESS__) && !__has_feature(address_sanitizer) &&     !defined(__EMSCRIPTEN__)
 #define CATA_USE_SNMALLOC
 #endif
 
