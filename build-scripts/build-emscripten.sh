@@ -23,5 +23,9 @@ export CMAKE_PREFIX_PATH="${EMSCRIPTEN_SDL_PREFIX}:${CMAKE_PREFIX_PATH:-}"
 pkg-config --atleast-version=3.4.0 sdl3
 pkg-config --exists sdl3-image
 pkg-config --exists sdl3-ttf
+pkg-config --exists freetype2
 
-make -j$(nproc)   NATIVE=emscripten   BACKTRACE=0   TILES=1   SOUND=0   TESTS=0   RUNTESTS=0   RELEASE=1   CCACHE="$CCACHE"   LINTJSON=0   cataclysm-tiles.js
+FREETYPE_CFLAGS="$(pkg-config --cflags freetype2)"
+FREETYPE_LIBS="$(pkg-config --libs freetype2)"
+
+make -j$(nproc)   NATIVE=emscripten   BACKTRACE=0   TILES=1   SOUND=0   TESTS=0   RUNTESTS=0   RELEASE=1   CCACHE="$CCACHE"   LINTJSON=0   PKG_CONFIG=pkg-config   CXXFLAGS="$FREETYPE_CFLAGS"   LDFLAGS="$FREETYPE_LIBS"   cataclysm-tiles.js
