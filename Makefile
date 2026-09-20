@@ -691,6 +691,10 @@ endif
 
 # Emscripten
 ifeq ($(NATIVE), emscripten)
+  # Emscripten must compile both C and C++ sources.  Without an explicit CC,
+  # GNU make falls back to the host C compiler for .c files, producing native
+  # ELF objects that wasm-ld cannot link.
+  CC=emcc
   CXX=emcc
   LD=emcc
   ifeq ($(CCACHE), 1)
