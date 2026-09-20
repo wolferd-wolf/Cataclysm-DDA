@@ -48,7 +48,7 @@ jobs:
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ${{ runner.workspace }}/sdl3_prefix
-          key: emscripten-sdl3-3.4.16-image-3.4.6-ttf-3.2.2-${{ runner.os }}-v1
+          key: emscripten-sdl3-3.4.16-image-3.4.6-ttf-3.2.2-freetype-2.14.3-${{ runner.os }}-v2
 
       - name: Build SDL3 stack for WebAssembly
         if: steps.sdl-cache.outputs.cache-hit != 'true'
@@ -74,6 +74,11 @@ jobs:
           emcmake cmake -S sdl3_ttf_src -B sdl3_ttf_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_PREFIX_PATH="$PREFIX"             -DSDL3_DIR="$PREFIX/lib/cmake/SDL3"             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLTTF_VENDORED=ON             -DSDLTTF_STRICT=ON             -DSDLTTF_PLUTOSVG=OFF             -DSDLTTF_TESTS=OFF             -DSDLTTF_SAMPLES=OFF
           emmake cmake --build sdl3_ttf_build -j"$(nproc)"
           emmake cmake --install sdl3_ttf_build
+
+          git clone --depth 1 --branch VER-2-14-3 https://github.com/freetype/freetype.git freetype_src
+          emcmake cmake -S freetype_src -B freetype_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DFT_DISABLE_HARFBUZZ=ON             -DFT_DISABLE_BZIP2=ON             -DFT_DISABLE_PNG=ON             -DFT_DISABLE_ZLIB=ON             -DFT_DISABLE_BROTLI=ON
+          emmake cmake --build freetype_build -j"$(nproc)"
+          emmake cmake --install freetype_build
 
       - name: Fetch browser tileset
         run: |
