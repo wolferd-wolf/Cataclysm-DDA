@@ -119,7 +119,7 @@ CXX_WARNINGS = \
 ifeq ($(NATIVE), emscripten)
   # Emscripten uses Clang, which does not implement some GCC-only warning
   # options used by the native GCC build.
-  WARNINGS := $(filter-out -Wlogical-op -Wno-unknown-warning,$(WARNINGS))
+  WARNINGS := $(filter-out -Wlogical-op -Wno-unknown-warning -Wno-unknown-warning-option,$(WARNINGS))
   # The EM_ASM macro triggers this warning.
   WARNINGS += -Wno-gnu-zero-variadic-macro-arguments
 endif
