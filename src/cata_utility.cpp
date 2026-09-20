@@ -1,6 +1,5 @@
 #include "cata_utility.h"
 
-#include <zconf.h>
 #include <algorithm>
 #include <cerrno>
 #include <charconv>
