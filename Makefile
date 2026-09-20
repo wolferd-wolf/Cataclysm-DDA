@@ -117,6 +117,9 @@ CXX_WARNINGS = \
   -Wno-dangling-reference \
   -Wno-c++20-compat
 ifeq ($(NATIVE), emscripten)
+  # Emscripten uses Clang, which does not implement some GCC-only warning
+  # options used by the native GCC build.
+  WARNINGS := $(filter-out -Wlogical-op -Wno-unknown-warning,$(WARNINGS))
   # The EM_ASM macro triggers this warning.
   WARNINGS += -Wno-gnu-zero-variadic-macro-arguments
 endif
