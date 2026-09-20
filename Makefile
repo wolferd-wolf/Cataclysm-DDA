@@ -698,12 +698,13 @@ ifeq ($(NATIVE), emscripten)
     LD=$(CCACHEBIN) emcc
   endif
 
-  # Flags that are common across compile and link phases.
-  # The SDL2 emscripten ports this used to request are gone. Emscripten ships an
-  # SDL3 port (3.4.2) and SDL3_ttf, but no SDL3_image or SDL3_mixer, so how to
-  # build tiles here is an open question. This target cannot currently produce a
-  # working build; the rest of the emscripten plumbing is kept as it bit-rotted.
+  # The browser build uses a source-built SDL3 stack.  The workflow puts
+  # SDL3, SDL3_image and SDL3_ttf under EMSCRIPTEN_SDL_PREFIX and exposes
+  # their pkg-config files through PKG_CONFIG_PATH.
   EMCC_COMMON_FLAGS = -fexceptions
+  EMSCRIPTEN_SDL_PREFIX ?= $(EMSDK)/../sdl3_prefix
+  EMSCRIPTEN_SDL_CFLAGS := $(shell $(PKG_CONFIG) --cflags sdl3 sdl3-image sdl3-ttf)
+  EMSCRIPTEN_SDL_LIBS := $(shell $(PKG_CONFIG) --libs sdl3 sdl3-image sdl3-ttf)
 
   ifneq ($(RELEASE), 1)
     EMCC_COMMON_FLAGS += -g
@@ -725,6 +726,8 @@ ifeq ($(NATIVE), emscripten)
   LDFLAGS += -lembind
   LDFLAGS += -sWASM_BIGINT # Browser will require BigInt support.
   LDFLAGS += -sMAX_WEBGL_VERSION=2
+  CXXFLAGS += $(EMSCRIPTEN_SDL_CFLAGS)
+  LDFLAGS += $(EMSCRIPTEN_SDL_LIBS)
 
   ifeq ($(RELEASE), 1)
     # Release-mode Linker flags.
