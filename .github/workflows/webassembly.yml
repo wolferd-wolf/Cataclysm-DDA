@@ -78,9 +78,9 @@ jobs:
       - name: Fetch browser tileset
         run: |
           git clone --depth 1 --filter=blob:none --sparse             https://github.com/I-am-Erk/CDDA-Tilesets.git tilesets
-          git -C tilesets sparse-checkout set gfx/Ultica
+          git -C tilesets sparse-checkout set gfx/UltimateCataclysm
           mkdir -p gfx
-          cp -R tilesets/gfx/Ultica gfx/Ultica
+          cp -R tilesets/gfx/UltimateCataclysm gfx/UltimateCataclysm
 
       - name: Build WebAssembly
         env:
