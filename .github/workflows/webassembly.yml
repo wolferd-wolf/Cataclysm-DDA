@@ -35,7 +35,7 @@ jobs:
       - name: Install build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build pkg-config
+          sudo apt-get install -y cmake ninja-build pkg-config glslang-tools
 
       - name: Install Emscripten
         uses: mymindstorm/setup-emsdk@d233ac12b0102f74ca199f5dad7a4e2c13a8a745 # v13
@@ -61,28 +61,70 @@ jobs:
           export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
           git clone --depth 1 --branch release-3.4.16 https://github.com/libsdl-org/SDL.git sdl3_src
-          emcmake cmake -S sdl3_src -B sdl3_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDL_TESTS=OFF             -DSDL_EXAMPLES=OFF
+          emcmake cmake -S sdl3_src -B sdl3_build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DSDL_TESTS=OFF \
+            -DSDL_EXAMPLES=OFF
           emmake cmake --build sdl3_build -j"$(nproc)"
           emmake cmake --install sdl3_build
 
           git clone --depth 1 --branch release-3.4.6 --recurse-submodules --shallow-submodules https://github.com/libsdl-org/SDL_image.git sdl3_image_src
-          emcmake cmake -S sdl3_image_src -B sdl3_image_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_PREFIX_PATH="$PREFIX"             -DSDL3_DIR="$PREFIX/lib/cmake/SDL3"             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLIMAGE_VENDORED=ON             -DSDLIMAGE_DEPS_SHARED=OFF             -DSDLIMAGE_STRICT=ON             -DSDLIMAGE_PNG=ON             -DSDLIMAGE_JPG=OFF             -DSDLIMAGE_AVIF=OFF             -DSDLIMAGE_JXL=OFF             -DSDLIMAGE_TIF=OFF             -DSDLIMAGE_WEBP=OFF             -DSDLIMAGE_QOI=OFF             -DSDLIMAGE_SVG=OFF             -DSDLIMAGE_TESTS=OFF             -DSDLIMAGE_SAMPLES=OFF
+          emcmake cmake -S sdl3_image_src -B sdl3_image_build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$PREFIX" \
+            -DSDL3_DIR="$PREFIX/lib/cmake/SDL3" \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DSDLIMAGE_VENDORED=ON \
+            -DSDLIMAGE_DEPS_SHARED=OFF \
+            -DSDLIMAGE_STRICT=ON \
+            -DSDLIMAGE_PNG=ON \
+            -DSDLIMAGE_JPG=OFF \
+            -DSDLIMAGE_AVIF=OFF \
+            -DSDLIMAGE_JXL=OFF \
+            -DSDLIMAGE_TIF=OFF \
+            -DSDLIMAGE_WEBP=OFF \
+            -DSDLIMAGE_QOI=OFF \
+            -DSDLIMAGE_SVG=OFF \
+            -DSDLIMAGE_TESTS=OFF \
+            -DSDLIMAGE_SAMPLES=OFF
           emmake cmake --build sdl3_image_build -j"$(nproc)"
           emmake cmake --install sdl3_image_build
 
           git clone --depth 1 --branch release-3.2.2 --recurse-submodules --shallow-submodules https://github.com/libsdl-org/SDL_ttf.git sdl3_ttf_src
-          emcmake cmake -S sdl3_ttf_src -B sdl3_ttf_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_PREFIX_PATH="$PREFIX"             -DSDL3_DIR="$PREFIX/lib/cmake/SDL3"             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLTTF_VENDORED=ON             -DSDLTTF_STRICT=ON             -DSDLTTF_PLUTOSVG=OFF             -DSDLTTF_TESTS=OFF             -DSDLTTF_SAMPLES=OFF
+          emcmake cmake -S sdl3_ttf_src -B sdl3_ttf_build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$PREFIX" \
+            -DSDL3_DIR="$PREFIX/lib/cmake/SDL3" \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DSDLTTF_VENDORED=ON \
+            -DSDLTTF_STRICT=ON \
+            -DSDLTTF_PLUTOSVG=OFF \
+            -DSDLTTF_TESTS=OFF \
+            -DSDLTTF_SAMPLES=OFF
           emmake cmake --build sdl3_ttf_build -j"$(nproc)"
           emmake cmake --install sdl3_ttf_build
 
           git clone --depth 1 --branch VER-2-14-3 https://github.com/freetype/freetype.git freetype_src
-          emcmake cmake -S freetype_src -B freetype_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DFT_DISABLE_HARFBUZZ=ON             -DFT_DISABLE_BZIP2=ON             -DFT_DISABLE_PNG=ON             -DFT_DISABLE_ZLIB=ON             -DFT_DISABLE_BROTLI=ON
+          emcmake cmake -S freetype_src -B freetype_build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DFT_DISABLE_HARFBUZZ=ON \
+            -DFT_DISABLE_BZIP2=ON \
+            -DFT_DISABLE_PNG=ON \
+            -DFT_DISABLE_ZLIB=ON \
+            -DFT_DISABLE_BROTLI=ON
           emmake cmake --build freetype_build -j"$(nproc)"
           emmake cmake --install freetype_build
 
       - name: Fetch browser tileset
         run: |
-          git clone --depth 1 --filter=blob:none --sparse             https://github.com/I-am-Erk/CDDA-Tilesets.git tilesets
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/I-am-Erk/CDDA-Tilesets.git tilesets
           git -C tilesets sparse-checkout set gfx/UltimateCataclysm
           mkdir -p gfx
           cp -R tilesets/gfx/UltimateCataclysm gfx/UltimateCataclysm
