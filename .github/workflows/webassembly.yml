@@ -66,12 +66,12 @@ jobs:
           emmake cmake --install sdl3_build
 
           git clone --depth 1 --branch release-3.4.6 --recurse-submodules --shallow-submodules https://github.com/libsdl-org/SDL_image.git sdl3_image_src
-          emcmake cmake -S sdl3_image_src -B sdl3_image_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLIMAGE_VENDORED=ON             -DSDLIMAGE_DEPS_SHARED=OFF             -DSDLIMAGE_STRICT=ON             -DSDLIMAGE_PNG=ON             -DSDLIMAGE_JPG=OFF             -DSDLIMAGE_AVIF=OFF             -DSDLIMAGE_JXL=OFF             -DSDLIMAGE_TIF=OFF             -DSDLIMAGE_WEBP=OFF             -DSDLIMAGE_QOI=OFF             -DSDLIMAGE_SVG=OFF             -DSDLIMAGE_TESTS=OFF             -DSDLIMAGE_SAMPLES=OFF
+          emcmake cmake -S sdl3_image_src -B sdl3_image_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_PREFIX_PATH="$PREFIX"             -DSDL3_DIR="$PREFIX/lib/cmake/SDL3"             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLIMAGE_VENDORED=ON             -DSDLIMAGE_DEPS_SHARED=OFF             -DSDLIMAGE_STRICT=ON             -DSDLIMAGE_PNG=ON             -DSDLIMAGE_JPG=OFF             -DSDLIMAGE_AVIF=OFF             -DSDLIMAGE_JXL=OFF             -DSDLIMAGE_TIF=OFF             -DSDLIMAGE_WEBP=OFF             -DSDLIMAGE_QOI=OFF             -DSDLIMAGE_SVG=OFF             -DSDLIMAGE_TESTS=OFF             -DSDLIMAGE_SAMPLES=OFF
           emmake cmake --build sdl3_image_build -j"$(nproc)"
           emmake cmake --install sdl3_image_build
 
           git clone --depth 1 --branch release-3.2.2 --recurse-submodules --shallow-submodules https://github.com/libsdl-org/SDL_ttf.git sdl3_ttf_src
-          emcmake cmake -S sdl3_ttf_src -B sdl3_ttf_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLTTF_VENDORED=ON             -DSDLTTF_STRICT=ON             -DSDLTTF_PLUTOSVG=OFF             -DSDLTTF_TESTS=OFF             -DSDLTTF_SAMPLES=OFF
+          emcmake cmake -S sdl3_ttf_src -B sdl3_ttf_build -G Ninja             -DCMAKE_BUILD_TYPE=Release             -DCMAKE_PREFIX_PATH="$PREFIX"             -DSDL3_DIR="$PREFIX/lib/cmake/SDL3"             -DCMAKE_INSTALL_PREFIX="$PREFIX"             -DBUILD_SHARED_LIBS=OFF             -DSDLTTF_VENDORED=ON             -DSDLTTF_STRICT=ON             -DSDLTTF_PLUTOSVG=OFF             -DSDLTTF_TESTS=OFF             -DSDLTTF_SAMPLES=OFF
           emmake cmake --build sdl3_ttf_build -j"$(nproc)"
           emmake cmake --install sdl3_ttf_build
 
