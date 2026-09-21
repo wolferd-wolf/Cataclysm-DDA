@@ -27,8 +27,5 @@ pkg-config --exists freetype2
 
 CXX_PKG_CFLAGS="$(pkg-config --cflags sdl3 sdl3-image sdl3-ttf freetype2 zlib)"
 CXX_PKG_LIBS="$(pkg-config --libs sdl3 sdl3-image sdl3-ttf freetype2 zlib)"
-# The web data package is generated with file_packager --lz4, so the main
-# Emscripten runtime must include its LZ4 decompressor support. Pass this to
-# the linker through LDFLAGS so em++ applies the Emscripten setting.
 
-make -j$(nproc)   NATIVE=emscripten   BACKTRACE=0   TILES=1   SOUND=0   TESTS=0   RUNTESTS=0   RELEASE=1   CCACHE="$CCACHE"   LINTJSON=0   PKG_CONFIG=pkg-config   CXXFLAGS="$CXX_PKG_CFLAGS"   LDFLAGS="$CXX_PKG_LIBS -sLZ4=1"   cataclysm-tiles.js
+make -j$(nproc)   NATIVE=emscripten   BACKTRACE=0   TILES=1   SOUND=0   TESTS=0   RUNTESTS=0   RELEASE=1   CCACHE="$CCACHE"   LINTJSON=0   PKG_CONFIG=pkg-config   CXXFLAGS="$CXX_PKG_CFLAGS"   LDFLAGS="$CXX_PKG_LIBS"   cataclysm-tiles.js
