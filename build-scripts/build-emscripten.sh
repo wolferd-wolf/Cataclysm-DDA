@@ -26,6 +26,6 @@ pkg-config --exists sdl3-ttf
 pkg-config --exists freetype2
 
 CXX_PKG_CFLAGS="$(pkg-config --cflags sdl3 sdl3-image sdl3-ttf freetype2 zlib)"
-CXX_PKG_LIBS="$(pkg-config --libs sdl3 sdl3-image sdl3-ttf freetype2)"
+CXX_PKG_LIBS="$(pkg-config --libs sdl3 sdl3-image sdl3-ttf freetype2 zlib)"
 
 make -j$(nproc)   NATIVE=emscripten   BACKTRACE=0   TILES=1   SOUND=0   TESTS=0   RUNTESTS=0   RELEASE=1   CCACHE="$CCACHE"   LINTJSON=0   PKG_CONFIG=pkg-config   CXXFLAGS="$CXX_PKG_CFLAGS"   LDFLAGS="$CXX_PKG_LIBS"   cataclysm-tiles.js
