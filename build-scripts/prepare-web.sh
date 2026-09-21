@@ -28,10 +28,17 @@ rm -rf $BUNDLE_DIR/gfx/Ultica_iso
 
 $EMSDK/upstream/emscripten/tools/file_packager cataclysm-tiles.data --js-output=cataclysm-tiles.data.js --no-node --preload "$BUNDLE_DIR""@/" --lz4
 
+# The manually generated package loader must be part of the main Emscripten
+# JS output.  This is the same arrangement used by emcc --preload-file and
+# avoids racing two async script tags.  The loader starts the data fetch first;
+# the LZ4 runtime from cataclysm-tiles.js is available when the fetch completes.
+cat cataclysm-tiles.data.js cataclysm-tiles.js > cataclysm-tiles.js.tmp
+mv cataclysm-tiles.js.tmp cataclysm-tiles.js
+
 mkdir -p build/
 cp \
   build-data/web/index.html \
-  cataclysm-tiles.{data,data.js,js,wasm} \
+  cataclysm-tiles.{data,js,wasm} \
   data/font/Terminus.ttf \
   build
 cp data/cataicon.ico build/favicon.ico
