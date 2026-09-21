@@ -90,6 +90,7 @@ jobs:
             -DSDLIMAGE_DEPS_SHARED=OFF \
             -DSDLIMAGE_STRICT=ON \
             -DSDLIMAGE_PNG=ON \
+            -DSDLIMAGE_PNG_LIBPNG=OFF \
             -DSDLIMAGE_JPG=OFF \
             -DSDLIMAGE_AVIF=OFF \
             -DSDLIMAGE_JXL=OFF \
