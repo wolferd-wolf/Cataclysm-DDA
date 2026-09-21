@@ -698,11 +698,13 @@ ifeq ($(NATIVE), emscripten)
   # GNU make falls back to the host C compiler for .c files, producing native
   # ELF objects that wasm-ld cannot link.
   CC=emcc
-  CXX=emcc
-  LD=emcc
+  # C++ sources and the final link must use em++, which supplies the C++ standard
+  # library.  emcc is still used for C sources.
+  CXX=em++
+  LD=em++
   ifeq ($(CCACHE), 1)
-    CXX=$(CCACHEBIN) emcc
-    LD=$(CCACHEBIN) emcc
+    CXX=$(CCACHEBIN) em++
+    LD=$(CCACHEBIN) em++
   endif
 
   # The browser build uses a source-built SDL3 stack.  The workflow puts
